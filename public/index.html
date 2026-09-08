@@ -6,152 +6,138 @@
   <title>Polines Presensi Web</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <style>
     :root {
-      --bg-dark: #0b0f19;
-      --card-bg: rgba(18, 26, 43, 0.75);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --accent-blue: #3b82f6;
-      --accent-glow: rgba(59, 130, 246, 0.25);
-      --accent-green: #10b981;
-      --text-muted-dark: #94a3b8;
+      --bg-black: #09090b;
+      --card-bg: #121215;
+      --border-color: #27272a;
+      --border-light: #3f3f46;
+      --text-main: #fafafa;
+      --text-muted: #a1a1aa;
+      --radius-sm: 6px;
+      --radius-xs: 4px;
     }
 
     body {
-      background-color: var(--bg-dark);
-      background-image: 
-        radial-gradient(at 20% 20%, rgba(59, 130, 246, 0.12) 0px, transparent 50%),
-        radial-gradient(at 80% 80%, rgba(99, 102, 241, 0.08) 0px, transparent 50%);
+      background-color: var(--bg-black);
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      color: #f8fafc;
+      color: var(--text-main);
       padding: 1.5rem 1rem;
     }
 
     .card-custom {
       background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--card-border);
-      border-radius: 1.25rem;
-      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5),
-                  0 0 30px 0 var(--accent-glow);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
       width: 100%;
-      max-width: 440px;
+      max-width: 420px;
       overflow: hidden;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .card-header-custom {
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0) 100%);
-      border-bottom: 1px solid var(--card-border);
-      padding: 2rem 1.5rem 1.5rem;
+      background: #18181b;
+      border-bottom: 1px solid var(--border-color);
+      padding: 1.75rem 1.5rem 1.25rem;
       text-align: center;
     }
 
     .brand-icon {
-      width: 52px;
-      height: 52px;
-      background: linear-gradient(135deg, #2563eb, #3b82f6);
-      border-radius: 14px;
+      width: 44px;
+      height: 44px;
+      background: #ffffff;
+      border-radius: var(--radius-xs);
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.6rem;
-      color: #ffffff;
-      box-shadow: 0 8px 16px rgba(37, 99, 235, 0.35);
-      margin-bottom: 1rem;
+      font-size: 1.4rem;
+      color: #000000;
+      margin-bottom: 0.85rem;
     }
 
     .form-control, .input-group-text {
-      background-color: rgba(15, 23, 42, 0.6);
-      border-color: rgba(255, 255, 255, 0.1);
-      color: #f8fafc;
+      background-color: #18181b;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      border-radius: var(--radius-xs);
     }
 
     .form-control:focus {
-      background-color: rgba(15, 23, 42, 0.8);
-      border-color: var(--accent-blue);
-      box-shadow: 0 0 0 3px var(--accent-glow);
+      background-color: #18181b;
+      border-color: #ffffff;
+      box-shadow: none;
       color: #ffffff;
     }
 
     .input-group-text {
-      color: var(--text-muted-dark);
+      color: var(--text-muted);
+      border-right: none;
     }
 
-    .btn-accent {
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
-      border: none;
-      color: #ffffff;
+    .input-group .form-control {
+      border-left: none;
+    }
+
+    .btn-mono {
+      background: #ffffff;
+      border: 1px solid #ffffff;
+      color: #000000;
       font-weight: 600;
-      padding: 0.8rem 1.5rem;
-      border-radius: 0.75rem;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-      transition: all 0.2s ease;
+      padding: 0.7rem 1.25rem;
+      border-radius: var(--radius-xs);
+      transition: all 0.15s ease-in-out;
     }
 
-    .btn-accent:hover {
-      background: linear-gradient(135deg, #1d4ed8, #1e40af);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4);
-      color: #ffffff;
+    .btn-mono:hover, .btn-mono:focus {
+      background: #e4e4e7;
+      border-color: #e4e4e7;
+      color: #000000;
     }
 
-    .btn-success-custom {
-      background: linear-gradient(135deg, #059669, #10b981);
-      border: none;
-      color: #ffffff;
-      font-weight: 600;
-      padding: 0.8rem 1.5rem;
-      border-radius: 0.75rem;
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-      transition: all 0.2s ease;
-    }
-
-    .btn-success-custom:hover {
-      background: linear-gradient(135deg, #047857, #059669);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 18px rgba(16, 185, 129, 0.4);
-      color: #ffffff;
+    .btn-mono:disabled {
+      background: #3f3f46;
+      border-color: #3f3f46;
+      color: #a1a1aa;
     }
 
     .user-profile-badge {
-      background: rgba(30, 41, 59, 0.7);
-      border: 1px solid var(--card-border);
-      border-radius: 0.75rem;
-      padding: 0.85rem 1rem;
+      background: #18181b;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xs);
+      padding: 0.75rem 1rem;
     }
 
     .upload-box {
-      border: 2px dashed rgba(255, 255, 255, 0.15);
-      border-radius: 0.75rem;
+      border: 1px dashed var(--border-light);
+      border-radius: var(--radius-xs);
       padding: 1.25rem;
       text-align: center;
-      transition: border-color 0.2s ease;
-      background: rgba(15, 23, 42, 0.3);
+      background: #18181b;
+      transition: border-color 0.15s ease;
     }
 
     .upload-box:hover {
-      border-color: var(--accent-blue);
+      border-color: #ffffff;
     }
 
     .alert {
-      border-radius: 0.75rem;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      font-size: 0.9rem;
+      border-radius: var(--radius-xs);
+      border: 1px solid var(--border-color);
+      font-size: 0.875rem;
+      background-color: #18181b;
+      color: var(--text-main);
     }
 
     .result-box {
-      background: rgba(15, 23, 42, 0.7);
-      border: 1px solid var(--card-border);
-      border-radius: 0.75rem;
+      background: #18181b;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xs);
     }
 
     .result-box ul {
@@ -168,7 +154,7 @@
       <div class="brand-icon">
         <i class="bi bi-qr-code-scan"></i>
       </div>
-      <h4 class="mb-1 fw-bold tracking-tight">Presensi Web</h4>
+      <h5 class="mb-1 fw-bold tracking-tight text-white">Presensi Web</h5>
       <p class="mb-0 small text-secondary">Sistem Presensi Otomatis Polines</p>
     </div>
     <div class="card-body p-4">
@@ -176,7 +162,7 @@
       <!-- ALERT MESSAGE -->
       <div id="alertBox" class="alert d-none alert-dismissible fade show mb-4" role="alert">
         <span id="alertMessage"></span>
-        <button type="button" class="btn-close" onclick="hideAlert()"></button>
+        <button type="button" class="btn-close btn-close-white" onclick="hideAlert()"></button>
       </div>
 
       <!-- FORM LOGIN -->
@@ -195,9 +181,9 @@
             <input type="password" class="form-control" id="password" placeholder="Masukkan password" required autocomplete="current-password">
           </div>
         </div>
-        <button type="submit" id="btnLogin" class="btn btn-accent w-100">
+        <button type="submit" id="btnLogin" class="btn btn-mono w-100">
           <span id="btnLoginSpinner" class="spinner-border spinner-border-sm me-2 d-none" role="status"></span>
-          <i class="bi bi-box-arrow-in-right me-1" id="btnLoginIcon"></i> Masuk Sekarang
+          <i class="bi bi-box-arrow-in-right me-1" id="btnLoginIcon"></i> Masuk
         </button>
       </form>
 
@@ -205,16 +191,16 @@
       <div id="uploadSection" class="d-none">
         <div class="user-profile-badge d-flex justify-content-between align-items-center mb-4">
           <div class="d-flex align-items-center gap-3">
-            <div class="avatar-icon rounded-circle bg-primary bg-opacity-20 text-primary p-2 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
-              <i class="bi bi-person-fill fs-5"></i>
+            <div class="avatar-icon rounded bg-zinc-800 text-white p-2 d-flex align-items-center justify-content-center border border-secondary" style="width: 36px; height: 36px; border-radius: var(--radius-xs) !important;">
+              <i class="bi bi-person-fill fs-6"></i>
             </div>
             <div>
-              <span class="d-block fs-7 text-secondary lh-1">Mahasiswa</span>
+              <span class="d-block text-secondary lh-1" style="font-size: 0.75rem;">Mahasiswa</span>
               <span class="fw-semibold text-white fs-6" id="userNama">-</span>
             </div>
           </div>
-          <button id="btnLogout" class="btn btn-sm btn-outline-danger border-0">
-            <i class="bi bi-box-arrow-right fs-5"></i>
+          <button id="btnLogout" class="btn btn-sm btn-outline-light border-0">
+            <i class="bi bi-box-arrow-right fs-6"></i>
           </button>
         </div>
 
@@ -222,17 +208,17 @@
           <div class="mb-3">
             <label class="form-label small fw-medium text-secondary mb-2">PRESENSI QR CODE</label>
             <div class="upload-box">
-              <i class="bi bi-cloud-arrow-up fs-2 text-primary d-block mb-2"></i>
+              <i class="bi bi-cloud-arrow-up fs-3 text-white d-block mb-2"></i>
               <input class="form-control form-control-sm mb-2" type="file" id="qrImage" accept="image/*" required>
               <span class="text-secondary small d-block">Pilih screenshot QR Code presensi kelas</span>
             </div>
           </div>
 
           <div id="previewContainer" class="text-center mb-3 d-none">
-            <img id="imagePreview" src="#" alt="Preview QR" class="img-fluid rounded border border-secondary p-1" style="max-height: 180px;">
+            <img id="imagePreview" src="#" alt="Preview QR" class="img-fluid rounded border border-secondary p-1" style="max-height: 180px; border-radius: var(--radius-xs) !important;">
           </div>
 
-          <button type="submit" id="btnUpload" class="btn btn-success-custom w-100 mt-2">
+          <button type="submit" id="btnUpload" class="btn btn-mono w-100 mt-2">
             <span id="btnUploadSpinner" class="spinner-border spinner-border-sm me-2 d-none" role="status"></span>
             <i class="bi bi-send me-1" id="btnUploadIcon"></i> Proses Presensi
           </button>
@@ -258,13 +244,7 @@
   checkSession();
 
   function showAlert(msg, type = 'danger') {
-    const alertTypes = {
-      danger: 'alert-danger text-danger-emphasis',
-      success: 'alert-success text-success-emphasis',
-      warning: 'alert-warning text-warning-emphasis',
-      info: 'alert-info text-info-emphasis'
-    };
-    alertBox.className = `alert ${alertTypes[type] || 'alert-danger'} alert-dismissible fade show`;
+    alertBox.className = `alert alert-dismissible fade show mb-4`;
     alertMessage.innerHTML = msg;
     alertBox.classList.remove('d-none');
   }
@@ -405,16 +385,16 @@
         if (data.results && data.results.length) {
           matkulHtml = '<ul class="mt-2 text-secondary">' + data.results.map(r => `<li><b class="text-white">${r.matkul}</b>: ${r.status}</li>`).join('') + '</ul>';
         }
-        resultContent.innerHTML = `<div class="text-success fw-semibold"><i class="bi bi-check-circle-fill me-1"></i> ${data.message}</div>${matkulHtml}`;
+        resultContent.innerHTML = `<div class="text-white fw-semibold"><i class="bi bi-check-circle-fill me-1"></i> ${data.message}</div>${matkulHtml}`;
       } else if (data.status === 'sudah_presensi') {
         showAlert(data.message, 'warning');
-        resultContent.innerHTML = `<div class="text-warning fw-semibold"><i class="bi bi-exclamation-triangle-fill me-1"></i> ${data.message}</div>`;
+        resultContent.innerHTML = `<div class="text-white fw-semibold"><i class="bi bi-exclamation-triangle-fill me-1"></i> ${data.message}</div>`;
       } else if (data.status === 'tidak_eligible') {
         showAlert(data.message, 'info');
-        resultContent.innerHTML = `<div class="text-info fw-semibold"><i class="bi bi-info-circle-fill me-1"></i> ${data.message}</div>`;
+        resultContent.innerHTML = `<div class="text-white fw-semibold"><i class="bi bi-info-circle-fill me-1"></i> ${data.message}</div>`;
       } else {
         showAlert(data.message || 'Presensi gagal', 'danger');
-        resultContent.innerHTML = `<div class="text-danger fw-semibold"><i class="bi bi-x-circle-fill me-1"></i> ${data.message}</div>`;
+        resultContent.innerHTML = `<div class="text-white fw-semibold"><i class="bi bi-x-circle-fill me-1"></i> ${data.message}</div>`;
       }
     } catch (err) {
       showAlert('Terjadi kesalahan saat memproses gambar QR');
@@ -428,4 +408,5 @@
 
 </body>
 </html>
+
 
