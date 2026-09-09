@@ -1,7 +1,8 @@
 import { getJadwal, submitPresensi, fetchInertiaVersion } from './api.js';
+import { getValidApiSession } from './authService.js';
 import config from './config.js';
 
-export async function processPresensiSession(sessionAuth, qrRawString) {
+export async function processPresensiSession(sessionUser, qrRawString) {
   let qrData;
   try {
     qrData = JSON.parse(qrRawString);
@@ -20,22 +21,46 @@ export async function processPresensiSession(sessionAuth, qrRawString) {
   }
 
   const { id_kelas, token } = qrData;
-  const cookies = {
-    cookieSession: sessionAuth.cookie_session,
-    cookieXsrf: sessionAuth.cookie_xsrf,
-    cookieCfClearance: sessionAuth.cookie_cf_clearance,
-  };
 
-  let currentInertiaVersion = sessionAuth.inertia_version;
+  // Obtain valid API session (auto re-login if expired)
+  let apiSession;
+  try {
+    apiSession = await getValidApiSession(sessionUser.nim);
+  } catch (err) {
+    return { status: 'error', message: err.message };
+  }
+
+  let cookies = {
+    cookieSession: apiSession.cookie_session,
+    cookieXsrf: apiSession.cookie_xsrf,
+    cookieCfClearance: apiSession.cookie_cf_clearance,
+  };
+  let currentInertiaVersion = apiSession.inertia_version;
 
   let jadwalRes = await getJadwal({ ...cookies, inertiaVersion: currentInertiaVersion });
+
+  // If unauthenticated or expired (e.g. 401 or redirected to login), force refresh session and retry once
+  if (jadwalRes?.isError && (jadwalRes.status === 401 || jadwalRes.status === 302)) {
+    console.log('[INFO] API session unauthenticated, forcing re-login to API...');
+    try {
+      apiSession = await getValidApiSession(sessionUser.nim, true);
+      cookies = {
+        cookieSession: apiSession.cookie_session,
+        cookieXsrf: apiSession.cookie_xsrf,
+        cookieCfClearance: apiSession.cookie_cf_clearance,
+      };
+      currentInertiaVersion = apiSession.inertia_version;
+      jadwalRes = await getJadwal({ ...cookies, inertiaVersion: currentInertiaVersion });
+    } catch (refreshErr) {
+      return { status: 'error', message: refreshErr.message };
+    }
+  }
 
   if (jadwalRes?.isError && jadwalRes.status === 409) {
     console.log('[INFO] Got 409 conflict, refetching inertia version...');
     const newVersion = await fetchInertiaVersion();
     if (newVersion) {
       currentInertiaVersion = newVersion;
-      sessionAuth.inertia_version = newVersion;
       jadwalRes = await getJadwal({ ...cookies, inertiaVersion: currentInertiaVersion });
     }
   }

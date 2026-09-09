@@ -1,0 +1,23 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                String    @id @default(uuid())
+  nim               String    @unique
+  nama              String
+  passwordEncrypted String
+  cookieSession     String?
+  cookieXsrf        String?
+  cookieCfClearance String?
+  inertiaVersion    String?
+  cookieExpiresAt   DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+}

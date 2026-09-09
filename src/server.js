@@ -4,7 +4,7 @@ import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import config from './config.js';
-import { login } from './api.js';
+import { loginUser } from './authService.js';
 import { extractQrFromBuffer } from './qrDecoder.js';
 import { processPresensiSession } from './presensiService.js';
 
@@ -25,7 +25,10 @@ app.use(
     secret: config.sessionSecret,
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 2 * 60 * 60 * 1000 } // 2 hours
+    cookie: {
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days persistent web session
+      httpOnly: true,
+    }
   })
 );
 
@@ -47,7 +50,7 @@ app.get('/api/user', (req, res) => {
   res.json({ loggedIn: false });
 });
 
-// Login API
+// Login Web & API
 app.post('/api/login', async (req, res) => {
   const { nim, password } = req.body;
 
@@ -56,8 +59,8 @@ app.post('/api/login', async (req, res) => {
   }
 
   try {
-    const authData = await login(nim, password);
-    req.session.user = authData;
+    const authData = await loginUser(nim, password);
+    req.session.user = { nim: authData.nim, nama: authData.nama };
 
     res.json({
       success: true,

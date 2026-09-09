@@ -6,4 +6,5 @@ export default {
   defaultLongitude: parseFloat(process.env.DEFAULT_LONGITUDE || '110.434410'),
   port: parseInt(process.env.PORT || '3000', 10),
   sessionSecret: process.env.SESSION_SECRET || 'polines-presensi-secret-key-12345',
+  encryptionKey: process.env.ENCRYPTION_KEY || process.env.SESSION_SECRET || 'polines-presensi-secret-key-12345',
 };
