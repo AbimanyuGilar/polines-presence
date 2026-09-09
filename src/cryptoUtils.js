@@ -27,3 +27,33 @@ export function decryptPassword(encryptedText) {
   decrypted += decipher.final('utf8');
   return decrypted;
 }
+
+export function createAuthToken(userPayload) {
+  const payloadStr = JSON.stringify({ ...userPayload, iat: Date.now() });
+  return encryptPassword(payloadStr);
+}
+
+export function verifyAuthToken(token) {
+  try {
+    const jsonStr = decryptPassword(token);
+    if (!jsonStr) return null;
+    return JSON.parse(jsonStr);
+  } catch {
+    return null;
+  }
+}
+
+export function parseCookies(cookieHeader) {
+  const list = {};
+  if (!cookieHeader) return list;
+
+  cookieHeader.split(';').forEach((cookie) => {
+    let [name, ...rest] = cookie.split('=');
+    name = name?.trim();
+    if (!name) return;
+    const value = rest.join('=').trim();
+    list[name] = decodeURIComponent(value);
+  });
+
+  return list;
+}
