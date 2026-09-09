@@ -1,15 +1,10 @@
 import express from 'express';
 import session from 'express-session';
 import multer from 'multer';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import config from '../src/config.js';
-import { login } from '../src/api.js';
+import { loginUser } from '../src/authService.js';
 import { extractQrFromBuffer } from '../src/qrDecoder.js';
 import { processPresensiSession } from '../src/presensiService.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const app = express();
 const upload = multer({
@@ -25,7 +20,12 @@ app.use(
     secret: config.sessionSecret,
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 2 * 60 * 60 * 1000 }
+    cookie: {
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    }
   })
 );
 
@@ -54,8 +54,8 @@ app.post('/api/login', async (req, res) => {
   }
 
   try {
-    const authData = await login(nim, password);
-    req.session.user = authData;
+    const authData = await loginUser(nim, password);
+    req.session.user = { nim: authData.nim, nama: authData.nama };
 
     res.json({
       success: true,
@@ -63,7 +63,8 @@ app.post('/api/login', async (req, res) => {
       user: { nim: authData.nim, nama: authData.nama }
     });
   } catch (err) {
-    res.status(400).json({ success: false, message: err.message });
+    console.error('Error during /api/login:', err);
+    res.status(400).json({ success: false, message: err.message || 'Login gagal' });
   }
 });
 
