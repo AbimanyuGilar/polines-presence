@@ -165,8 +165,16 @@
         <button type="button" class="btn-close btn-close-white" onclick="hideAlert()"></button>
       </div>
 
+      <!-- INITIAL LOADING STATE -->
+      <div id="loadingSection" class="text-center py-4">
+        <div class="spinner-border text-light mb-2" role="status" style="width: 2rem; height: 2rem;">
+          <span class="visually-hidden">Memuat...</span>
+        </div>
+        <p class="small text-secondary mb-0">Memuat status sesi...</p>
+      </div>
+
       <!-- FORM LOGIN -->
-      <form id="loginForm" class="d-block">
+      <form id="loginForm" class="d-none">
         <div class="mb-3">
           <label for="nim" class="form-label small fw-medium text-secondary">NIM MAHASISWA</label>
           <div class="input-group">
@@ -235,6 +243,7 @@
 </div>
 
 <script>
+  const loadingSection = document.getElementById('loadingSection');
   const loginForm = document.getElementById('loginForm');
   const uploadSection = document.getElementById('uploadSection');
   const alertBox = document.getElementById('alertBox');
@@ -264,6 +273,8 @@
       }
     } catch (err) {
       showLoginForm();
+    } finally {
+      loadingSection.classList.add('d-none');
     }
   }
 
@@ -408,5 +419,3 @@
 
 </body>
 </html>
-
-
