@@ -28,7 +28,9 @@ jobs:
             # 1. Pastikan folder ~/app tersedia dan clone/pull dari branch rupacloud
             set -e
             export GIT_TERMINAL_PROMPT=0
-            if [ ! -d ~/app/.git ]; then
+            TARGET_REPO="${{ github.repository }}"
+            CURRENT_REPO="$(cd ~/app 2>/dev/null && git config --get remote.origin.url 2>/dev/null || true)"
+            if [ ! -d ~/app/.git ] || ! echo "$CURRENT_REPO" | grep -q "$TARGET_REPO"; then
               rm -rf ~/app
               git clone --depth 1 -b rupacloud https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git ~/app
               cd ~/app
@@ -36,7 +38,9 @@ jobs:
               cd ~/app
               git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
               git fetch --depth 1 origin rupacloud
-              git reset --hard origin/rupacloud
+              git checkout -B rupacloud FETCH_HEAD
+              git reset --hard FETCH_HEAD
+              git clean -fd
             fi
             # 2. Inject environment variables dari GitHub Secret (APP_ENV)
             if [ -n "$APP_ENV_CONTENT" ]; then
